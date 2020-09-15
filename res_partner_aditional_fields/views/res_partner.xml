@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="res_partner_aditional_fields_form" model="ir.ui.view">
+            <field name="name">res.partner.aditional.fields.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <!-- Add your fields or attributes here -->
+
+                    <field name="to_days"/>
+                    <field name="day_upload_week"/>
+
+
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>
