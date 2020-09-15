@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="payment_form_view" model="ir.ui.view">
+            <field name="name">mass_payment_payment_form</field>
+            <field name="model">payment</field>
+            <field name="arch" type="xml">
+                <form string="Mass Payment">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" default_focus="1" class="oe_read_only"></field>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="journal" required="1"/>
+                                <field name="partner_ids" invisible="1"></field>
+                                <field name="amount_total" widget='monetary'/>
+                                <field name="payment_date" required="1"/>
+                            </group>
+                            <group col="2">
+
+                                <field name="payment_method_id" domain="[('payment_type', '=', 'outbound')]"
+                                       required="1" widget="radio"/>
+                            </group>
+
+                        </group>
+                        <notebook>
+                            <page string="Invoices">
+                                <field name="invoices_ids"
+                                       domain="['&amp;',('type', '=', 'in_invoice'),('state','=','posted'),('invoice_payment_state','!=','paid')]">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="invoice_partner_display_name" string="Vendor"/>
+                                        <field name="invoice_date_due"/>
+                                        <field name="invoice_origin"/>
+                                        <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payments">
+                                <field name="payments_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="o_attachment_preview"
+                    />
+                    <div class="oe_chatter" modifiers="{}">
+                        <field name="message_follower_ids" widget="mail_followers" modifiers="{}"/>
+                        <field name="activity_ids" widget="mail_activity" modifiers="{}"/>
+                        <field name="message_ids" widget="mail_thread" modifiers="{}"
+                               options="{'display_log_button': True}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="payment_header_view" model="ir.ui.view">
+            <field name="name">header_payment_form</field>
+            <field name="model">payment</field>
+            <field name="inherit_id" ref="payment_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form//sheet" position="before">
+                    <header>
+                        <button name="invoice_payment" string="Register Payment" class="oe_highlight"
+                                type="object" groups="account.group_account_invoice"
+                                attrs="{'invisible': [('state', '!=', 'not_paid')]}"
+                        />
+                        <field name="state" widget="statusbar" statusbar_visible="not_paid,paid"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+        <record id="payment_tree_view" model="ir.ui.view">
+            <field name="name">mass_payment_payment_tree</field>
+            <field name="model">payment</field>
+            <field name="arch" type="xml">
+                <tree string="Mass Payment">
+                    <field name="name"/>
+                    <field name="partner_ids" widget="many2many_tags"/>
+                    <field name="journal"/>
+                    <field name="amount_total" widget='monetary'/>
+                    <field name="payment_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="payment_act_window" model="ir.actions.act_window">
+            <field name="name">payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new Payment.
+                </p>
+            </field>
+        </record>
+
+        <record id="account_invoice_view_tree" model="ir.ui.view">
+            <field name="name">account.move.tree.inherit.payment</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_partner_display_name']" position="replace">
+                    <field name="invoice_partner_display_name" string="Vendor"/>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem name="Mass Payment" id="payment_menu" parent="account.menu_finance_payables"
+                  action="payment_act_window"/>
+
+    </data>
+</odoo>
+
