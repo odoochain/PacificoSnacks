@@ -1,0 +1,10 @@
+# -*- coding: utf-8 -*-
+
+from . import hr_type_payslip
+from . import hr_payroll
+from . import hr_payslip_run
+from . import hr_leave
+from . import hr_rule_input
+from . import hr_parameter_payslip
+from . import hr_payroll_structure
+from . import account_analytic_account
