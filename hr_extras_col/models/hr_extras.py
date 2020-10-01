@@ -20,7 +20,7 @@ class HrExtras(models.Model):
     date = fields.Date('Date', track_visibility='onchange', readonly=True, states={'draft': [('readonly', False)]})
     amount = fields.Float(string='Quantity', default=0.0, readonly=True, states={'draft': [('readonly', False)]})
     payslip_id = fields.Many2one('hr.payslip', string='Payslip', readonly=True)
-    input_id = fields.Many2one('hr.rule.input', string='Input', track_visibility='onchange', readonly=True, states={'draft': [('readonly', False)]})
+    input_id = fields.Many2one('hr.payslip.input.type', string='Input', track_visibility='onchange', readonly=True, states={'draft': [('readonly', False)]})
 
 
     _sql_constraints = [

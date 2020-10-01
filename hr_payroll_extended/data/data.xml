@@ -13,7 +13,7 @@
             <field name="code">BONOS</field>
         </record>
 
-		<record id="hr_rule_salario_contrato" model="hr.salary.rule">
+		<!-- <record id="hr_rule_salario_contrato" model="hr.salary.rule">
             <field name="code">SALCONTRACTO</field>
             <field name="name">Salario Contrato Mes</field>
             <field name="category_id" ref="hr_payroll_extended.INFO"/>
@@ -181,7 +181,7 @@ result=(((rules.SALCONTRACTO and SALCONTRACTO)/240)*(rules.P_RECARGODIURNOFESTIV
             <field name="name">Horas Recargo Diurno Festivo (75%)</field>
             <field name="input_id" ref="hr_payroll_extended.hr_rule_recargodiurnofestivo75"/>
             <field name="type_input">hours</field>
-        </record>
+        </record> -->
 
         <!-- Decimal Precision -->
         <record forcecreate="True" id="decimal_rule_factor" model="decimal.precision">
