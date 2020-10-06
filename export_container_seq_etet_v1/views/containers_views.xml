@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="containers_view_form" model="ir.ui.view">
+            <field name="name">containers.view.form</field>
+            <field name="model">containers</field>
+            <field name="arch" type="xml">
+                <form string="containers_form">
+                    <sheet>
+                        <group>
+                            <field name="customers"  placeholder="Cliente" required="1" />
+                            <field name="code_containers" placeholder="Codigo contenedor" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="containers_view_tree" model="ir.ui.view">
+            <field name="name">containers.view.tree</field>
+            <field name="model">containers</field>
+            <field name="arch" type="xml">
+                <tree string="containers_tree">
+                    <field name="customers" width="30%"/>
+                    <field name="code_containers" width="30%"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="containers_action" model="ir.actions.act_window">
+            <field name="name">containers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">containers</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_similing_face">
+                    Create Containers
+                </p>
+            </field>
+        </record>
+
+        <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
+        <menuitem id="containers_menu_root"
+                  name="Containers"
+                  groups="base.group_user"
+                  parent="stock.menu_stock_inventory_control" sequence="3"
+                  web_icon="containers,static/description/icon.png"
+                  />
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="containers_menu_item"
+                  name="Containers"
+                  parent="stock.menu_stock_inventory_control" sequence="1000"
+                  action="containers_action" />
+
+    </data>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="fields_foreign_trade_form" model="ir.ui.view">
+            <field name="name">fields.foreign.trade.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <!-- Add your fields or attributes here -->
+
+
+                    <field name="requested_delivery_date"/>
+
+                    <field name="possible_upload_date"/>
+                    <field name="to_days"/>
+                    <field name="day_upload_week"/>
+                    <field name="possible_arrival_date_destination"/>
+
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>
