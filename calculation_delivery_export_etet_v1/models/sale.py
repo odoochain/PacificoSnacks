@@ -16,6 +16,8 @@ class Sales(models.Model):
     @api.onchange('requested_delivery_date')
     def _possible_upload_date(self):
 
+        if self.requested_delivery_date != False:
+
             day_upload = self.requested_delivery_date - timedelta(days=self.to_days)
             self.num_day = day_upload.strftime("%w")
 
@@ -25,6 +27,8 @@ class Sales(models.Model):
 
             self.possible_upload_date = day_upload.strftime("%m-%d-%Y-%A")
             self.possible_arrival_date_destination = (day_upload + timedelta(days=self.to_days)).strftime("%m-%d-%Y-%A")
+        else:
+               self.possible_upload_date = False
 
 
 
