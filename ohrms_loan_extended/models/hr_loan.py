@@ -10,7 +10,7 @@ class HrLoan(models.Model):
     _inherit = "hr.loan"
 
 
-    input_id = fields.Many2one('hr.payslip.input.type', string='Input', track_visibility='onchange', readonly=True, states={'draft': [('readonly', False)]})
+    input_id = fields.Many2one('hr.rule.input', string='Input', track_visibility='onchange', readonly=True, states={'draft': [('readonly', False)]})
     loan_fijo = fields.Boolean('Fijo', default=False, track_visibility='onchange', readonly=True, states={'draft': [('readonly', False)]})
     state = fields.Selection([
         ('draft', 'Draft'),

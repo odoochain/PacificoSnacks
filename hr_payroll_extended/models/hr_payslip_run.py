@@ -15,8 +15,7 @@ class HrPayslipRun(models.Model):
 
     type_payslip_id = fields.Many2one('hr.type.payslip', string="Type")
     date = fields.Date('Date Account', states={'draft': [('readonly', False)]}, readonly=True,
-                       help="Keep empty to use the period of the validation(Payslip) date.")
-    journal_id = fields.Many2one('account.journal', string='Diario')
+                       help="Keep empty to use the period of the validation(Payslip) date.")    
 
 
     def actualizar_entradas_run(self):

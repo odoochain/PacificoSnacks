@@ -23,7 +23,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',        
         'views/hr_extras_view.xml',
-        # 'data/data.xml',
+        'data/data.xml',
         # 'report/report.xml',
     ],
     'qweb': [

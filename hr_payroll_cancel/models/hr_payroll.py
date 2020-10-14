@@ -30,6 +30,9 @@ class HrPayslip(models.Model):
             if payslip.refunded_id and payslip.refunded_id.state != 'cancel':
                 raise ValidationError(_("""To cancel the Original Payslip the
                     Refunded Payslip needs to be canceled first!"""))
-            if payslip.move_id:
+            if payslip.move_id.journal_id:
                 payslip.move_id.write({'state': 'draft'})
+            else:
+                payslip.move_id.reverse_moves()
+                payslip.move_id = False
         return self.write({'state': 'cancel'})

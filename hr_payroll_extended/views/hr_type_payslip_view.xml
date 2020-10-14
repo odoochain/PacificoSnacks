@@ -41,7 +41,7 @@
             id="hr_menu_type_payslip"
             name="Type Payslip"
             action="action_hr_type_payslip"
-            parent="hr_payroll.menu_hr_payroll_configuration"
+            parent="hr_payroll.hr_payroll_menu_configuration"
             sequence="300"
             groups="hr_payroll.group_hr_payroll_manager"/>
 </odoo>

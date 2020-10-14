@@ -15,7 +15,7 @@
     "license": "AGPL-3",
     "depends": [
         # "account_cancel",
-        "hr_payroll_account",
+        "hr_payroll_account_community",
     ],
     "data": [
         "views/hr_payslip_view.xml",
