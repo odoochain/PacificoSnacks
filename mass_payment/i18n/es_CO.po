@@ -4,18 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0-20200721\n"
+"Project-Id-Version: Odoo Server 13.0-20200403\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 20:03+0000\n"
-"PO-Revision-Date: 2020-09-14 15:09-0500\n"
+"POT-Creation-Date: 2020-10-13 03:59+0000\n"
+"PO-Revision-Date: 2020-10-13 03:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: es_CO\n"
-"X-Generator: Poedit 2.3\n"
 
 #. module: mass_payment
 #: model:ir.model.fields,field_description:mass_payment.field_payment__message_needaction
@@ -51,6 +49,16 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:mass_payment.field_payment__create_date
 msgid "Created on"
 msgstr "Creado en"
+
+#. module: mass_payment
+#: model:ir.model.fields.selection,name:mass_payment.selection__payment__invoices_type__customer
+msgid "Customer"
+msgstr ""
+
+#. module: mass_payment
+#: model:ir.actions.server,name:mass_payment.payment_customer_act_window
+msgid "Customer Payment Server Action"
+msgstr ""
 
 #. module: mass_payment
 #: model:ir.model.fields,field_description:mass_payment.field_payment__display_name
@@ -111,7 +119,9 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: mass_payment
+#: model:ir.model.fields,field_description:mass_payment.field_payment__invoices_customer_ids
 #: model:ir.model.fields,field_description:mass_payment.field_payment__invoices_ids
+#: model:ir.model.fields,field_description:mass_payment.field_payment__invoices_supplier_ids
 #: model_terms:ir.ui.view,arch_db:mass_payment.payment_form_view
 msgid "Invoices"
 msgstr "Facturas"
@@ -147,10 +157,19 @@ msgid "Main Attachment"
 msgstr ""
 
 #. module: mass_payment
-#: model:ir.ui.menu,name:mass_payment.payment_menu
 #: model_terms:ir.ui.view,arch_db:mass_payment.payment_form_view
 #: model_terms:ir.ui.view,arch_db:mass_payment.payment_tree_view
 msgid "Mass Payment"
+msgstr "Pago Masivo"
+
+#. module: mass_payment
+#: model:ir.ui.menu,name:mass_payment.payment_menu_customer
+msgid "Mass Payment Customer"
+msgstr "Pago Masivo"
+
+#. module: mass_payment
+#: model:ir.ui.menu,name:mass_payment.payment_menu_vendor
+msgid "Mass Payment Vendor"
 msgstr "Pago Masivo"
 
 #. module: mass_payment
@@ -224,6 +243,12 @@ msgid "Paid"
 msgstr "Pagado"
 
 #. module: mass_payment
+#: code:addons/mass_payment/models/payment.py:0
+#, python-format
+msgid "Payment Customer"
+msgstr "Pago Clientes"
+
+#. module: mass_payment
 #: model:ir.model.fields,field_description:mass_payment.field_payment__payment_date
 msgid "Payment Date"
 msgstr "Fecha de pago"
@@ -235,6 +260,12 @@ msgstr "Tipo de método de pago"
 
 #. module: mass_payment
 #: code:addons/mass_payment/models/payment.py:0
+#, python-format
+msgid "Payment Vendors"
+msgstr "Pago Proveedores"
+
+#. module: mass_payment
+#: code:addons/mass_payment/models/payment.py:0
 #: model:ir.model.fields,field_description:mass_payment.field_payment__payments_ids
 #: model_terms:ir.ui.view,arch_db:mass_payment.payment_form_view
 #, python-format
@@ -242,9 +273,9 @@ msgid "Payments"
 msgstr "Pagos"
 
 #. module: mass_payment
-#: model_terms:ir.ui.view,arch_db:mass_payment.payment_header_view
+#: model_terms:ir.ui.view,arch_db:mass_payment.payment_form_view
 msgid "Register Payment"
-msgstr "Registro de pago"
+msgstr "Registrar Pago"
 
 #. module: mass_payment
 #: model:ir.model.fields,field_description:mass_payment.field_payment__activity_user_id
@@ -271,14 +302,19 @@ msgid ""
 msgstr ""
 
 #. module: mass_payment
-#: model_terms:ir.actions.act_window,help:mass_payment.payment_act_window
-msgid "There is no examples click here to add new Payment."
-msgstr "No hay ejemplos, haga clic aquí para agregar un nuevo pago."
+#: model:ir.model.fields.selection,name:mass_payment.selection__payment__invoices_type__supplier
+msgid "Supplier"
+msgstr "Proveedor"
 
 #. module: mass_payment
 #: model:ir.model.fields,field_description:mass_payment.field_payment__amount_total
 msgid "Total Amount"
 msgstr "Cantidad total"
+
+#. module: mass_payment
+#: model:ir.model.fields,field_description:mass_payment.field_payment__invoices_type
+msgid "Type"
+msgstr "Tipo"
 
 #. module: mass_payment
 #: model:ir.model.fields,help:mass_payment.field_payment__activity_exception_decoration
@@ -303,6 +339,11 @@ msgid "Vendor"
 msgstr "Proveedor"
 
 #. module: mass_payment
+#: model:ir.actions.server,name:mass_payment.payment_vendor_act_window
+msgid "Vendor Payment Server Action"
+msgstr ""
+
+#. module: mass_payment
 #: model:ir.model.fields,field_description:mass_payment.field_payment__website_message_ids
 msgid "Website Messages"
 msgstr ""
@@ -311,8 +352,3 @@ msgstr ""
 #: model:ir.model.fields,help:mass_payment.field_payment__website_message_ids
 msgid "Website communication history"
 msgstr ""
-
-#. module: mass_payment
-#: model:ir.actions.act_window,name:mass_payment.payment_act_window
-msgid "payment"
-msgstr "Pago masivo"

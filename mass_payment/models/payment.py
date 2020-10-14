@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# Keware.co - Julián Valdés - Info@keware.co / See LICENSE file for full copyright and licensing details.
+
 from odoo import fields, models, api, _
 from collections import defaultdict
 
@@ -10,6 +13,8 @@ MAP_INVOICE_TYPE_PARTNER_TYPE = {
     'in_receipt': 'supplier',
 }
 
+MAP_INVOICE_TYPE_PARTNER_TYPE_SUPPLIER = ['in_invoice', 'in_refund', 'in_receipt']
+
 
 class MassPayment(models.Model):
     _name = 'payment'
@@ -18,15 +23,56 @@ class MassPayment(models.Model):
 
     name = fields.Char(string="Number", readonly=True, copy=False, default=_("Draft"))
     partner_ids = fields.Many2many(comodel_name='res.partner', string='Vendor', required=True)
+    invoices_type = fields.Selection(selection=[('customer', 'Customer'), ('supplier', 'Supplier')], string='Type',
+                                     required=True, store=True, readonly=True)
     invoices_ids = fields.Many2many(comodel_name='account.move', string='Invoices')
+    invoices_customer_ids = fields.Many2many(comodel_name='account.move', relation='invoices_customer_rel',
+                                             string='Invoices',
+                                             domain=[('type', 'in', ['out_invoice', 'out_refund', 'out_receipt']),
+                                                     ('state', '=', 'posted'),
+                                                     ('invoice_payment_state', '!=', 'paid')], store=True)
+    invoices_supplier_ids = fields.Many2many(comodel_name='account.move', relation='invoices_supplier_rel',
+                                             string='Invoices',
+                                             domain=[('type', 'in', ['in_invoice', 'in_refund', 'in_receipt']),
+                                                     ('state', '=', 'posted'),
+                                                     ('invoice_payment_state', '!=', 'paid')], store=True)
     journal = fields.Many2one(comodel_name='account.journal', string='Journal',
                               domain=[('type', 'in', ('bank', 'cash'))])
     amount_total = fields.Float(string='Total Amount', compute='_compute_total_amount')
     payment_date = fields.Date(string='Payment Date')
     payment_method_id = fields.Many2one(comodel_name='account.payment.method', string='Payment Method Type')
     group_payment = fields.Boolean(default=False)
-    payments_ids = fields.Many2many(comodel_name='account.payment', string='Payments')
+    payments_ids = fields.Many2many(comodel_name='account.payment', string='Payments', store=True)
     state = fields.Selection(selection=[('not_paid', 'Not Paid'), ('paid', 'Paid')], string="State", default='not_paid')
+
+    def _compute_invoice_type_customer(self):
+        self.invoices_type = 'customer'
+        return {
+            'name': _('Payment Customer'),
+            'domain': [('invoices_type', '=', 'customer')],
+            'res_model': 'payment',
+            'view_mode': 'tree,form',
+            'type': 'ir.actions.act_window',
+            'context': {'default_invoices_type': 'customer'}
+        }
+
+    def _compute_invoice_type_supplier(self):
+        self.invoices_type = 'supplier'
+        return {
+            'name': _('Payment Vendors'),
+            'domain': [('invoices_type', '=', 'supplier')],
+            'res_model': 'payment',
+            'view_mode': 'tree,form',
+            'type': 'ir.actions.act_window',
+            'context': {'default_invoices_type': 'supplier'}
+        }
+
+    @api.onchange('invoices_customer_ids', 'invoices_supplier_ids')
+    def _compute_invoices_ids(self):
+        if self.invoices_type == 'customer':
+            self.invoices_ids = [inv.id for inv in self.invoices_customer_ids]
+        if self.invoices_type == 'supplier':
+            self.invoices_ids = [inv.id for inv in self.invoices_supplier_ids]
 
     @api.depends("invoices_ids")
     def _compute_total_amount(self):
@@ -56,7 +102,7 @@ class MassPayment(models.Model):
         @return: action_vals
         """
 
-        seq_code = "seq.mass_payment"
+        seq_code = "seq.mass_payment.customers" if self.invoices_type == "customer" else "seq.mass_payment.vendors"
         self.name = self.env["ir.sequence"].next_by_code(seq_code)
 
         payment = self.env['account.payment']
