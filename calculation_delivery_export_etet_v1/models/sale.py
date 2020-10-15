@@ -25,8 +25,8 @@ class Sales(models.Model):
                 day_upload = day_upload - timedelta(days=1)
                 self.num_day = day_upload.strftime("%w")
 
-            self.possible_upload_date = day_upload.strftime("%m-%d-%Y-%A")
-            self.possible_arrival_date_destination = (day_upload + timedelta(days=self.to_days)).strftime("%m-%d-%Y-%A")
+            self.possible_upload_date = day_upload.strftime("%m-%d-%Y")
+            self.possible_arrival_date_destination = (day_upload + timedelta(days=self.to_days)).strftime("%m-%d-%Y")
         else:
                self.possible_upload_date = False
 
