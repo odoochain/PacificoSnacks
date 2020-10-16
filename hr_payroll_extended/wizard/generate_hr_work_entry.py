@@ -29,6 +29,6 @@ class GenerateHRWorkEntry(models.TransientModel):
                 'date_start': self.date_start,
                 'date_stop': self.date_stop,
                 'active': True,
-                'name': contract_id.name + ' ' + str(self.date_start) + ' - ' + str(self.date_stop)
+                'name': contract_id.employee_id.name + ' ' + str(self.date_start) + ' - ' + str(self.date_stop)
             })
         return {'type': 'ir.actions.act_window_close'}
