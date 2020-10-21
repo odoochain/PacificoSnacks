@@ -1,1 +1,1 @@
-from . import account_exchange_rate
+from . import currency_rate
