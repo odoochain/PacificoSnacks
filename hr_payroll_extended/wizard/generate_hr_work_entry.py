@@ -23,7 +23,7 @@ class GenerateHRWorkEntry(models.TransientModel):
             if not contract_id.employee_id:
                 employee = self.env['hr.employee'].search([('contract_id', '=', contract_id.id)])
             else:
-                employee = contract_i.employee_id
+                employee = contract_id.employee_id
             work_obj = self.env['hr.work.entry']
             work_id = work_obj.create({
                 'employee_id': employee.id,

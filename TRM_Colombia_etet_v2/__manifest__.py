@@ -7,7 +7,9 @@
     'author': 'Cesar Quiroga',
     'website': 'Website',
     'depends': ['base'],
-    'data': [],
+    'data': [
+        'views/currency_rate_field_cop_views.xml',
+    ],
     'demo': [],
     'application': True,
     'installable': True,
