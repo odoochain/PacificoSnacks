@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 class currency_rate(models.Model):
     _inherit = "res.currency.rate"
 
-    value_cop = fields.Float('Valor en COP')
+    #value_cop = fields.Float('Valor en COP')
 
     @api.model
     def get_col_trm(self):
@@ -24,7 +24,8 @@ class currency_rate(models.Model):
 
         if last_rates.name == False :
             vals = {
-            "value_cop": float(trm.value),
+           #"value_cop": float(trm.value),
+            "x_studio_field_rqbWr": float(trm.value),
             "rate": 1/float(trm.value),
             "name": date,
             "currency_id": 2
