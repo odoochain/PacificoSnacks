@@ -48,13 +48,5 @@
             </field>
         </record>
 
-
-
-        <!-- This Menu Item must have a parent and an action -->
-        <menuitem id="required_documentation_menu_item"
-                  name="Documentacion requerida"
-                  parent="contacts.res_partner_menu_config" sequence="4"
-                  action="required_documentation_action" />
-
     </data>
 </odoo>

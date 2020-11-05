@@ -49,5 +49,10 @@
             </field>
         </record>
 
+        <!--menuitem id="required_parther_documentation_menu_item"
+                  name="Documentacion de las compañias"
+                  parent="contacts.res_partner_menu_config" sequence="4"
+                  action="partner_documentation_action" -->
+
     </data>
 </odoo>
