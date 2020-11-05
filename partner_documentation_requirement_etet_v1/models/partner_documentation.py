@@ -23,6 +23,8 @@ class Partner_documentation(models.Model):
     def _validity_unit(self):
         if self.validity_unit > 500:
             raise ValidationError('La unidad de vigencia no puede ser mayor a 500!')
+        if self.validity_unit == 0:
+            raise ValidationError('La unidad de vigencia no puede ser igual a 0!')
 
     @api.depends('approved')
     def get_date_checked(self):
@@ -45,7 +47,7 @@ class Partner_documentation(models.Model):
             else:
                     recod.date_expiration = False
 
-    @api.depends('date_expedition', 'approved')
+    @api.depends('date_expedition', 'approved', 'validity_period','validity_unit')
     def get_state(self):
         today =  date.today()
         for recod in self:
