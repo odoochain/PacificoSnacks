@@ -41,8 +41,6 @@ class Partner(models.Model):
         return res
 
     def create_document(self, category_id, partner_id):
-
-        date = time.strftime('%Y-%m-%d')
         req_documents = self.env['required_documentation'].search([('category_id', '=', category_id)])
         if req_documents.id != False:
             for doc in req_documents.documentation_id:
@@ -51,17 +49,19 @@ class Partner(models.Model):
                 not_category_doc.unlink()
                 if partner_doc.id == False:
                     vals = {
-                        "partner_id": partner_id,
                         "document_name": doc.document_name,
-                        "date_checked": False,
                         "approved": False,
+                        "date_checked": False,
+                        "date_expedition": False,
+                        "date_expiration": False,
+                        "state": 'Pendiente',
                         "validity_unit": doc.validity_unit,
                         "validity_period": doc.validity_period,
+                        "partner_id": partner_id,
                         "category_id": req_documents.category_id.id,
-                        "state": 'Pendiente',
-                        "date_expiration": False,
                     }
                     self.env['partner_documentation'].create(vals)
+
         if req_documents.id == False:
             partner_doc = self.env['partner_documentation'].search([('partner_id', '=', partner_id), ('category_id', '!=', category_id)])
             partner_doc.unlink()
