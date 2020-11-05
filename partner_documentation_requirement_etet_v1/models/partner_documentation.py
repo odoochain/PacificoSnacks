@@ -2,6 +2,7 @@ from odoo import fields, models, api
 import time
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import ValidationError
 
 class Partner_documentation(models.Model):
     _name = 'partner_documentation'
@@ -17,6 +18,11 @@ class Partner_documentation(models.Model):
     date_expiration = fields.Date(compute ='get_date_expiration', string='Fecha de vencimiento', store=True)
     state = fields.Char(compute ='get_state', string='Estado', store=True)
     category_id = fields.Many2one('res.partner.category', string='Categoria')
+
+    @api.constrains('validity_unit')
+    def _validity_unit(self):
+        if self.validity_unit > 500:
+            raise ValidationError('La unidad de vigencia no puede ser mayor a 500!')
 
     @api.depends('approved')
     def get_date_checked(self):
@@ -39,7 +45,7 @@ class Partner_documentation(models.Model):
             else:
                     recod.date_expiration = False
 
-    @api.depends('date_expedition')
+    @api.depends('date_expedition', 'approved')
     def get_state(self):
         today =  date.today()
         for recod in self:

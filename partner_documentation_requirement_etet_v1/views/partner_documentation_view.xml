@@ -26,11 +26,11 @@
             <field name="arch" type="xml">
                 <tree string="partner_documentation_tree" editable="top" >
                     <field name="document_name" readonly ="True"/>
-                    <field name="approved" />
-                    <field name="date_checked" />
                     <field name="date_expedition" />
                     <field name="date_expiration"/>
                     <field name="state" />
+                    <field name="approved" readonly ="True" />
+                    <field name="date_checked" />
                     <field name="validity_unit" required="True"/>
                     <field name="validity_period" required="True"/>
                     <field name="partner_id" readonly ="True" />
