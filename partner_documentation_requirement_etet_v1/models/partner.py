@@ -1,6 +1,4 @@
 from odoo import fields, models, api
-import time
-from . import required_documentation
 
 class Partner(models.Model):
     _inherit = 'res.partner'
