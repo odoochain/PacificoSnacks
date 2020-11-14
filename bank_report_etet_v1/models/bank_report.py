@@ -27,7 +27,7 @@ class BankReport(models.TransientModel):
     aplicacion = fields.Selection(string="tipo de pago", selection=[('I', 'Inmediata'), ('M', 'Medio dia'),('N', 'Noche')])
     descripcion = fields.Char("Descripcion")
     journal = fields.Many2one('account.journal', string='Diario')
-    tipo_pago = fields.Selection(string="tipo de pago", selection=[('1', 'Pago a Proveedores'),('3', 'Pago de Nomina')])
+    tipo_pago = fields.Selection(string="tipo de pago", selection=[('104', 'Pago a Proveedores'),('98', 'Pago de Nomina')])
     fecha_aplicacion = fields.Date('Fecha de Aplicacion')
     asientos = fields.Many2many('account.move', string='Asientos', required=True)
     exist_asientos = fields.Boolean(string='Asientos existentes', compute='get_data_asientos')
@@ -42,7 +42,7 @@ class BankReport(models.TransientModel):
     @api.onchange('journal','tipo_pago')
     def onchange_journal(self):
         for rec in self:
-            return {'domain': {'asientos': [('journal_id', '=', rec.journal.id),
+            return {'domain': {'asientos': [ ('name', 'like', 'CE'),('journal_id', '=', rec.journal.id),
                                              '|', ('partner_id.category_id.id', '=', int(rec.tipo_pago)),('partner_id.category_id.parent_id', '=', int(rec.tipo_pago)) ]}}
 
     def do_report(self):
