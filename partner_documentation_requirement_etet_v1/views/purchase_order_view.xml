@@ -9,7 +9,19 @@
                 <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
 
                     <page string="Documentacion requerida" name="doc_req" attrs="{'invisible': [['exist_doc','=',False]]}">
-                            <field name="partner_doc_id" readonly ="True"/>
+                            <field name="partner_doc_id" create='0' >
+                                <tree string="partner_documentation_tree" create="false" delete="false" editable="bottom">
+                                    <field name="document_name" readonly ="True"/>
+                                    <field name="date_expedition" readonly ="True"/>
+                                    <field name="date_expiration" readonly ="True"/>
+                                    <field name="state" readonly ="True" />
+                                    <field name="approved" readonly ="True" />
+                                    <field name="date_checked" readonly ="True" />
+                                    <field name="validity_unit" readonly ="True"/>
+                                    <field name="validity_period" readonly ="True"/>
+                                    <field name="partner_id" readonly ="True" />
+                                </tree>
+                            </field>
                             <field name="exist_doc" invisible = "True" />
                     </page>
                 </xpath>
