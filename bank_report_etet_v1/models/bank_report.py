@@ -42,7 +42,7 @@ class BankReport(models.TransientModel):
     @api.onchange('journal','tipo_pago')
     def onchange_journal(self):
         for rec in self:
-            return {'domain': {'asientos': [ ('name', 'like', 'CE'),('journal_id', '=', rec.journal.id),
+            return {'domain': {'asientos': [('journal_id', '=', rec.journal.id),
                                              '|', ('partner_id.category_id.id', '=', int(rec.tipo_pago)),('partner_id.category_id.parent_id', '=', int(rec.tipo_pago)) ]}}
 
     def do_report(self):
