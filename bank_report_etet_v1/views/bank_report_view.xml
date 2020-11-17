@@ -13,7 +13,7 @@
                          <span>Reporte pago Bancos</span>
                     </h3>
                     <field name="tipo_pago" placeholder="Tipo de pago" required="1"/>
-                    <field name="journal" placeholder="Cuenta a debitar" required="1"/>
+                    <field name="journal" placeholder="Cuenta a debitar" required="1" domain="[('type', '=', 'bank')]"/>
                     <field name="secuencia" placeholder="Secuencia de envio" required="1"/>
                     <field name="aplicacion" placeholder="Aplicacion" required="1"/>
                     <field name="descripcion" placeholder="Descripcion" required="1"/>
