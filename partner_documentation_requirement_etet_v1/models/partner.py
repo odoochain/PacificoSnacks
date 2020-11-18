@@ -29,13 +29,14 @@ class Partner(models.Model):
 
     def write(self, values):
         res = super(Partner, self).write(values)
-        partner_id = self.id
-        if self.category_id:
-            category_id = self.category_id[0].id
-            self.create_document(category_id, partner_id)
-        else:
-            partner_doc = self.env['partner_documentation'].search([('partner_id', '=', partner_id)])
-            partner_doc.unlink()
+        for record in self:
+            partner_id = record.id
+            if record.category_id:
+                category_id = record.category_id[0].id
+                record.create_document(category_id, partner_id)
+            else:
+                partner_doc = record.env['partner_documentation'].search([('partner_id', '=', partner_id)])
+                partner_doc.unlink()
         return res
 
     def create_document(self, category_id, partner_id):
