@@ -30,7 +30,7 @@ class Partner(models.Model):
     def write(self, values):
         res = super(Partner, self).write(values)
         partner_id = self.id
-        if self.category_id.id != False:
+        if self.category_id:
             category_id = self.category_id[0].id
             self.create_document(category_id, partner_id)
         else:

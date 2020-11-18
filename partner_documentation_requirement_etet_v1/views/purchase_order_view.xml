@@ -6,8 +6,11 @@
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'supplier', 'show_vat': True}"
+                           options="{'no_quick_create': True}" placeholder="Name, TIN, Email, or Reference"/>
+                </xpath>
                 <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
-
                     <page string="Documentacion requerida" name="doc_req" attrs="{'invisible': [['exist_doc','=',False]]}">
                             <field name="partner_doc_id" create='0' >
                                 <tree string="partner_documentation_tree" create="false" delete="false" editable="bottom">
