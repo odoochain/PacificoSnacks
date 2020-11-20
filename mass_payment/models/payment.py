@@ -81,7 +81,7 @@ class MassPayment(models.Model):
         """
         total = 0
         for inv in self.invoices_ids:
-            total = total + inv.amount_total
+            total = total + inv.amount_residual
         self.amount_total = total
 
     @api.onchange("invoices_ids")
