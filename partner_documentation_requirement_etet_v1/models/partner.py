@@ -32,8 +32,9 @@ class Partner(models.Model):
         for record in self:
             partner_id = record.id
             if record.category_id:
-                category_id = record.category_id[0].id
-                record.create_document(category_id, partner_id)
+                for c in record.category_id:
+                    category_id = c.id
+                    record.create_document(category_id, partner_id)
             else:
                 partner_doc = record.env['partner_documentation'].search([('partner_id', '=', partner_id)])
                 partner_doc.unlink()

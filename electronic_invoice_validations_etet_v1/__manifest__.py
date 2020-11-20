@@ -6,7 +6,7 @@
     'category': 'Category',
     'author': 'Cesar Quiroga',
     'website': 'Website',
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'l10n_co_edi','l10n_co_edi_ubl_2_1'],
     'data': [
 
     ],
