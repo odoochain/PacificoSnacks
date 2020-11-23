@@ -8,8 +8,8 @@ class Partner(models.Model):
     _description = 'definicion de campos adicionales para contactos'
     to_print = fields.Char('Datos contacto', compute='_to_print')
     to_days = fields.Integer('Dias en transito')
-    cod_customer = fields.Integer('Codigo Ciente')
-    cod_ciiu = fields.Integer('Codigo CIIU')
+    cod_customer = fields.Char('Codigo Ciente')
+    cod_ciiu = fields.Char('Codigo CIIU')
     day_upload_week = fields.Selection(string='Dia de cargue cliente', selection=[('0', 'domingo'), ('1', 'lunes'),
                                                                           ('2', 'martes'), ('3', 'miercoles'),
                                                                           ('4', 'jueves'), ('5', 'viernes'),
