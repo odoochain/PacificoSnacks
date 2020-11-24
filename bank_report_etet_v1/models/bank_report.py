@@ -27,7 +27,7 @@ class BankReport(models.TransientModel):
     aplicacion = fields.Selection(string="tipo de pago", selection=[('I', 'Inmediata'), ('M', 'Medio dia'),('N', 'Noche')])
     descripcion = fields.Char("Descripcion")
     journal = fields.Many2one('account.journal', string='Diario')
-    tipo_pago = fields.Selection(string="tipo de pago", selection=[('1', 'Pago a Proveedores'),('3', 'Pago de Nomina')])
+    tipo_pago = fields.Selection(string="tipo de pago", selection=[('104', 'Pago a Proveedores'),('98', 'Pago de Nomina')])
     fecha_aplicacion = fields.Date('Fecha de Aplicacion')
     asientos = fields.Many2many('account.move', string='Asientos', required=True)
     exist_asientos = fields.Boolean(string='Asientos existentes', compute='get_data_asientos')
@@ -94,9 +94,9 @@ class BankReport(models.TransientModel):
         ws.write(1, 0, '' if not company[0].vat else company[0].vat)
         ws.write(1, 1, self.tipo_pago)
         if self.tipo_pago:
-            if self.tipo_pago == '1':
+            if self.tipo_pago == '104':
                 ws.write(1, 1, '220')
-            elif self.tipo_pago == '3':
+            elif self.tipo_pago == '98':
                 ws.write(1, 1, '225')
             else:
                 ws.write(1, 1, '')
