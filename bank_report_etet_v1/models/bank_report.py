@@ -132,6 +132,7 @@ class BankReport(models.TransientModel):
 
         fila = 3
         for ac in account:
+            vat = ac.partner_id.vat
             if ac.partner_id.l10n_co_document_type:
                if ac.partner_id.l10n_co_document_type == 'id_document':
                    ws.write(fila, 0, '1')
@@ -139,6 +140,11 @@ class BankReport(models.TransientModel):
                    ws.write(fila, 0, '2')
                elif ac.partner_id.l10n_co_document_type == 'rut':
                    ws.write(fila, 0, '3')
+                   pos = (ac.partner_id.vat).find("-")
+                   if pos != -1:
+                       vat = ac.partner_id.vat[0:pos]
+                   else:
+                       vat = ac.partner_id.vat    
                elif ac.partner_id.l10n_co_document_type == 'id_card':
                    ws.write(fila, 0, '4')
                elif ac.partner_id.l10n_co_document_type == 'passport':
@@ -148,7 +154,7 @@ class BankReport(models.TransientModel):
             else:
                 ws.write(fila, 0, '')
 
-            ws.write(fila, 1, '' if not ac.partner_id.vat else ac.partner_id.vat )
+            ws.write(fila, 1, '' if not vat else vat.replace(".", ""))
             ws.write(fila, 2, ac.partner_id.name)
             if ac.partner_id.bank_ids:
                 if ac.partner_id.bank_ids[0].account_type == '1':
@@ -165,7 +171,7 @@ class BankReport(models.TransientModel):
             ws.write(fila, 7, '')
             ws.write(fila, 8, '')
             ws.write(fila, 9, '')
-            ws.write(fila, 10, ac.amount_total)
+            ws.write(fila, 10, "{:.2f}".format(ac.amount_total))
             ws.write(fila, 11, str(self.fecha_aplicacion.isoformat()).replace("-", ""))
             fila += 1
 
