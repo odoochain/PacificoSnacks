@@ -136,6 +136,11 @@ class BankReport(models.TransientModel):
             if ac.partner_id.l10n_co_document_type:
                if ac.partner_id.l10n_co_document_type == 'id_document':
                    ws.write(fila, 0, '1')
+                   pos = (ac.partner_id.vat).find("-")
+                   if pos != -1:
+                       vat = ac.partner_id.vat[0:pos]
+                   else:
+                       vat = ac.partner_id.vat
                elif ac.partner_id.l10n_co_document_type == 'foreign_id_card':
                    ws.write(fila, 0, '2')
                elif ac.partner_id.l10n_co_document_type == 'rut':
