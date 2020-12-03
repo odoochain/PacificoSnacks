@@ -25,7 +25,8 @@ class MassPayment(models.Model):
     partner_ids = fields.Many2many(comodel_name='res.partner', string='Vendor', required=True)
     invoices_type = fields.Selection(selection=[('customer', 'Customer'), ('supplier', 'Supplier')], string='Type',
                                      required=True, store=True, readonly=True)
-    invoices_ids = fields.Many2many(comodel_name='account.move', string='Invoices')
+    invoices_ids = fields.Many2many(comodel_name='account.move', string='Invoices', compute='_compute_invoices_ids',
+                                    store=True)
     invoices_customer_ids = fields.Many2many(comodel_name='account.move', relation='invoices_customer_rel',
                                              string='Invoices',
                                              domain=[('type', 'in', ['out_invoice', 'out_refund', 'out_receipt']),
@@ -38,7 +39,8 @@ class MassPayment(models.Model):
                                                      ('invoice_payment_state', '!=', 'paid')], store=True)
     journal = fields.Many2one(comodel_name='account.journal', string='Journal',
                               domain=[('type', 'in', ('bank', 'cash'))])
-    amount_total = fields.Float(string='Total Amount', compute='_compute_total_amount')
+    amount_total = fields.Float(string='Total Amount', compute='_compute_total_amount', store=True)
+    paid_value = fields.Float(string='Paid Value', compute='_compute_amount', store=True)
     payment_date = fields.Date(string='Payment Date')
     payment_method_id = fields.Many2one(comodel_name='account.payment.method', string='Payment Method Type')
     group_payment = fields.Boolean(default=False)
@@ -67,32 +69,63 @@ class MassPayment(models.Model):
             'context': {'default_invoices_type': 'supplier'}
         }
 
-    @api.onchange('invoices_customer_ids', 'invoices_supplier_ids')
+    @api.depends('invoices_customer_ids', 'invoices_supplier_ids')
     def _compute_invoices_ids(self):
-        if self.invoices_type == 'customer':
-            self.invoices_ids = [inv.id for inv in self.invoices_customer_ids]
-        if self.invoices_type == 'supplier':
-            self.invoices_ids = [inv.id for inv in self.invoices_supplier_ids]
+        for mass in self:
+            if mass.invoices_type == 'customer':
+                mass.invoices_ids = [inv.id for inv in mass.invoices_customer_ids]
+                print(mass.invoices_ids)
+            if mass.invoices_type == 'supplier':
+                mass.invoices_ids = [inv.id for inv in mass.invoices_supplier_ids]
 
-    @api.depends("invoices_ids")
+    @api.depends('invoices_customer_ids', 'invoices_supplier_ids')
     def _compute_total_amount(self):
         """
         Calcule el total de todas las facturas.
         """
-        total = 0
-        for inv in self.invoices_ids:
-            total = total + inv.amount_residual
-        self.amount_total = total
+        for mass in self:
+            total = 0
+            if mass.invoices_type == 'customer':
+                for inv in mass.invoices_customer_ids:
+                    print(int(inv.ids[0]))
+                    amount_residual = mass.env['account.move'].search(
+                        [('id', '=', int(inv.ids[0]))]).amount_residual_signed
+                    print(amount_residual)
+                    total = total + amount_residual
+                mass.amount_total = abs(total)
 
-    @api.onchange("invoices_ids")
+            if mass.invoices_type == 'supplier':
+                for inv in mass.invoices_supplier_ids:
+                    print(int(inv.ids[0]))
+                    amount_residual = mass.env['account.move'].search(
+                        [('id', '=', int(inv.ids[0]))]).amount_residual_signed
+                    print(amount_residual)
+                    total = total + amount_residual
+                mass.amount_total = abs(total)
+
+    @api.depends('payments_ids')
+    def _compute_amount(self):
+        for mass in self:
+            amount = 0
+            for line in mass.payments_ids:
+                amount = amount + line.amount
+            self.paid_value = abs(amount)
+
+    @api.onchange('invoices_customer_ids', 'invoices_supplier_ids')
     def _change_invoices(self):
         """
         Asigna los proveedores dependiendo de las facturas seleccionadas.
         """
         partner_ids = []
-        for inv in self.invoices_ids:
-            partner_ids.append(inv.partner_id.id)
-        self.partner_ids = partner_ids
+        if self.invoices_type == 'customer':
+            for inv in self.invoices_customer_ids:
+                partner_ids.append(inv.partner_id.id)
+            self.partner_ids = partner_ids
+
+        if self.invoices_type == 'supplier':
+            for inv in self.invoices_supplier_ids:
+                partner_ids.append(inv.partner_id.id)
+            self.partner_ids = partner_ids
 
     def invoice_payment(self):
         """
@@ -130,12 +163,22 @@ class MassPayment(models.Model):
         @return: una lista de valores de pago (diccionario).
         '''
         grouped = defaultdict(lambda: self.env["account.move"])
-        for inv in self.invoices_ids:
-            if self.group_payment:
-                grouped[(inv.commercial_partner_id, inv.currency_id, inv.invoice_partner_bank_id,
-                         MAP_INVOICE_TYPE_PARTNER_TYPE[inv.type])] += inv
-            else:
-                grouped[inv.id] += inv
+        if self.invoices_type == 'customer':
+            for inv in self.invoices_customer_ids:
+                if self.group_payment:
+                    grouped[(inv.commercial_partner_id, inv.currency_id, inv.invoice_partner_bank_id,
+                             MAP_INVOICE_TYPE_PARTNER_TYPE[inv.type])] += inv
+                else:
+                    grouped[inv.id] += inv
+
+        if self.invoices_type == 'supplier':
+            for inv in self.invoices_supplier_ids:
+                if self.group_payment:
+                    grouped[(inv.commercial_partner_id, inv.currency_id, inv.invoice_partner_bank_id,
+                             MAP_INVOICE_TYPE_PARTNER_TYPE[inv.type])] += inv
+                else:
+                    grouped[inv.id] += inv
+
         return [self._prepare_payment_vals(invoices) for invoices in grouped.values()]
 
     def _prepare_payment_vals(self, invoices):
