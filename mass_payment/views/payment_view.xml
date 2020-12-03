@@ -23,7 +23,10 @@
                             <group>
                                 <field name="journal" required="1"/>
                                 <field name="partner_ids" invisible="1"></field>
-                                <field name="amount_total" widget='monetary'/>
+                                <field name="amount_total" widget='monetary'
+                                       attrs="{'invisible': [('state', '=', 'paid')]}"/>
+                                <field name="paid_value" widget='monetary'
+                                       attrs="{'invisible': [('state', '=', 'not_paid')]}"/>
                                 <field name="payment_date" required="1"/>
                             </group>
                             <group col="2">
@@ -36,42 +39,15 @@
                         </group>
                         <notebook>
                             <page string="Invoices">
-                                <field name="invoices_ids" invisible="1">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="invoice_partner_display_name" string="Vendor"/>
-                                        <field name="invoice_date_due"/>
-                                        <field name="invoice_origin"/>
-                                        <field name="amount_total" widget='monetary'
-                                               options="{'currency_field': 'currency_id'}"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                                <field name="invoices_customer_ids"  attrs="{'invisible': [('invoices_type', '=', 'supplier')]}">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="invoice_partner_display_name" string="Vendor"/>
-                                        <field name="invoice_date_due"/>
-                                        <field name="invoice_origin"/>
-                                        <field name="amount_total" widget='monetary'
-                                               options="{'currency_field': 'currency_id'}"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                                <field name="invoices_supplier_ids" attrs="{'invisible': [('invoices_type', '=', 'customer')]}">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="invoice_partner_display_name" string="Vendor"/>
-                                        <field name="invoice_date_due"/>
-                                        <field name="invoice_origin"/>
-                                        <field name="amount_total" widget='monetary'
-                                               options="{'currency_field': 'currency_id'}"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
+                                <field name="invoices_ids" attrs="{'invisible': [('state', '=', 'not_paid')]}"
+                                       readonly="1"/>
+                                <field name="invoices_customer_ids"
+                                       attrs="{'invisible': ['|', ('invoices_type', '=', 'supplier'), ('state', '=', 'paid')]}"/>
+                                <field name="invoices_supplier_ids"
+                                       attrs="{'invisible': ['|', ('invoices_type', '=', 'customer'), ('state', '=', 'paid')]}"/>
                             </page>
                             <page string="Payments">
-                                <field name="payments_ids"/>
+                                <field name="payments_ids" readonly="1"/>
                             </page>
                         </notebook>
                     </sheet>
