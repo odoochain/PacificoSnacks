@@ -176,9 +176,9 @@ class HrPayslip(models.Model):
                 day_rounded = self._round_days(work_entry_type, days)
                 add_days_rounding += (days - day_rounded)
                 if work_entry_type_id == 6 or work_entry_type_id == 11 :
-                    if day_rounded >= 2 and day_rounded < 3:
+                    if day_rounded >= 3 and day_rounded < 4:
                             r_amount = (((paid_amount / 30) * absence_rate_2D) / 100) * day_rounded
-                    elif day_rounded >= 3 and day_rounded <= 90:
+                    elif day_rounded >= 4 and day_rounded <= 90:
                             r_amount = (((paid_amount / 30) * absence_rate_90D) / 100) * day_rounded
                     elif day_rounded >= 91:
                             r_amount = (((paid_amount / 30) * absence_rate_M91D) / 100) * day_rounded

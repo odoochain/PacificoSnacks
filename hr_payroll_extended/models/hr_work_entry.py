@@ -5,7 +5,10 @@ from contextlib import contextmanager
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
-
+from datetime import datetime
+from datetime import timedelta
+import time
+import datetime
 
 class HrWorkEntry(models.Model):
     _inherit = 'hr.work.entry'
@@ -21,8 +24,13 @@ class HrWorkEntry(models.Model):
         if not date_start or not date_stop:
             return 0
         dt = date_stop - date_start
+        lim_day = timedelta(hours=8)
+        if dt <= lim_day:
+            return dt.total_seconds()/3600.
+        else:
+            return (dt.days+1) * 8  # Number of hours
         # return dt.days * 8 + dt.seconds / 3600  # Number of hours
-        return (dt.days+1) * 8  # Number of hours
+        # return (dt.days+1) * 8  # Number of hours
 
 
     def _inverse_duration(self):
