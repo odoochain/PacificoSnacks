@@ -1,5 +1,5 @@
 from odoo import fields, models, api
-
+import datetime
 
 class AccountAsset(models.Model):
     _inherit = 'account.asset'
@@ -7,11 +7,15 @@ class AccountAsset(models.Model):
 
     valorizado = fields.Boolean(string="Valorizado", help="Si el activo esta valorizado marque la casilla")
     duracion_f = fields.Integer(string='Number of Depreciations', readonly=True, states={'draft': [('readonly', False)], 'model': [('readonly', False)]}, default=5, help="Numero de depreciaciones para el activo informe fiscal ")
-    tax_residual_value = fields.Monetary(string="Valor Residual Fiscal", help="Valor digitable a partir de 2018" )
-    method_period_fiscal = fields.Selection([('1', 'Months'), ('12', 'Years')], string='Number of Months in a Period',
+    tax_residual_value = fields.Monetary(string="Costo Fiscal")
+    non_depreciable_value = fields.Monetary(string="Valor Residual Fiscal")
+    method_period_fiscal = fields.Selection([('1', 'Meses'), ('12', 'Años')], string='Number of Months in a Period',
                                      readonly=True, default='12',
                                      states={'draft': [('readonly', False)], 'model': [('readonly', False)]},
                                      help="The amount of time between two depreciations")
+    fiscal_depreciation_move_ids = fields.One2many('account.move_fiscal', 'asset_id', string='Lineas de Depreciacion')
+
+
 
 
     def compute_depreciation_fiscal_board(self):
@@ -29,16 +33,32 @@ class AccountAsset(models.Model):
         if posted_depreciation_move_ids and posted_depreciation_move_ids[-1].date:
             last_depreciation_date = fields.Date.from_string(posted_depreciation_move_ids[-1].date)
             if last_depreciation_date > depreciation_date:  # in case we unpause the asset
-                depreciation_date = last_depreciation_date + relativedelta(months=+int(self.method_period))
-        commands = [(2, line_id.id, False) for line_id in self.depreciation_move_ids.filtered(lambda x: x.state == 'draft')]
+                depreciation_date = last_depreciation_date + relativedelta(months=+int(self.method_period_fiscal))
+        commands = [(2, line_id.id, False) for line_id in self.fiscal_depreciation_move_ids]
         newlines = self._recompute_board(depreciation_number, starting_sequence, amount_to_depreciate, depreciation_date, already_depreciated_amount, amount_change_ids)
         newline_vals_list = []
         for newline_vals in newlines:
             # no need of amount field, as it is computed and we don't want to trigger its inverse function
             del(newline_vals['amount_total'])
+
             newline_vals_list.append(newline_vals)
-        new_moves = self.env['account.move'].create(newline_vals_list)
-        for move in new_moves:
+        for val in newline_vals_list:
+            vals = {
+                "ref_fiscal": val['ref'],
+                "asset_remaining_value_fiscal": val['asset_remaining_value'],
+                "asset_depreciated_value_fiscal": val['asset_depreciated_value'],
+                "date_fiscal": val['date'],
+                "amount_total": self.tax_residual_value / self.duracion_f
+
+            }
+            move = self.env['account.move_fiscal'].create(vals)
             commands.append((4, move.id))
-        return self.write({'depreciation_move_ids': commands})
+
+
+#        new_moves = self.env['account.move_fiscal'].create(newline_vals_list)
+#        for move in new_moves:
+#           commands.append((4, move.id))
+        return self.write({'fiscal_depreciation_move_ids': commands})
+
+
 

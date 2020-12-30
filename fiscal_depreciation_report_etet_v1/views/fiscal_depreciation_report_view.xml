@@ -12,7 +12,7 @@
                     <h3>
                          <span>Reporte Depreciacion Fiscal</span>
                     </h3>
-
+                    <field name="date_creation" required="1"/>
                 <footer>
                     <button name="do_report" string="Generar" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="oe_link" special="cancel"/>
