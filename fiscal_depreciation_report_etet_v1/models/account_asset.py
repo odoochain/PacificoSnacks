@@ -14,8 +14,11 @@ class AccountAsset(models.Model):
                                      states={'draft': [('readonly', False)], 'model': [('readonly', False)]},
                                      help="The amount of time between two depreciations")
     fiscal_depreciation_move_ids = fields.One2many('account.move_fiscal', 'asset_id', string='Lineas de Depreciacion')
-
-
+    ref_asset = fields.Char(string="Referencia")
+    location = fields.Char(string="Ubicacion del equipo")
+    responsable_asset = fields.Many2one('res.partner',string="Responsable del Activo")
+    invoice_purchase = fields.Many2one('purchase.order',string="Factura de compra")
+    
 
 
     def compute_depreciation_fiscal_board(self):
