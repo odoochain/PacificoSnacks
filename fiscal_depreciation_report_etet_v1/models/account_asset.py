@@ -30,7 +30,7 @@ class AccountAsset(models.Model):
         if self.prorata:
             depreciation_number += 1
         starting_sequence = 0
-        amount_to_depreciate = self.tax_residual_value + sum([m.amount_total for m in amount_change_ids])
+        amount_to_depreciate = (self.tax_residual_value - self.non_depreciable_value) + sum([m.amount_total for m in amount_change_ids])
         depreciation_date = self.first_depreciation_date
         # if we already have some previous validated entries, starting date is last entry + method period
         if posted_depreciation_move_ids and posted_depreciation_move_ids[-1].date:
