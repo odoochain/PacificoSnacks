@@ -51,7 +51,7 @@ class AccountAsset(models.Model):
                 "asset_remaining_value_fiscal": val['asset_remaining_value'],
                 "asset_depreciated_value_fiscal": val['asset_depreciated_value'],
                 "date_fiscal": val['date'],
-                "amount_total": self.tax_residual_value / self.duracion_f
+                "amount_total": (self.tax_residual_value - self.non_depreciable_value) / self.duracion_f
 
             }
             move = self.env['account.move_fiscal'].create(vals)
