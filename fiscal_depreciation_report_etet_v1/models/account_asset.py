@@ -17,17 +17,17 @@ class AccountAsset(models.Model):
     ref_asset = fields.Char(string="Referencia")
     responsable_asset = fields.Many2one('hr.employee', string="Responsable del Activo")
     cargo = fields.Char(string="cargo", compute='_cargo')
-    invoice_purchase = fields.Many2one('account.move', string="Facturas de compra")
+    invoice_purchases = fields.Many2one('account.move', string="Factura de compra")
     invoice_date = fields.Char(string='fecha', compute='_invoice_date')
     invoice_partner = fields.Char(string='proveedor', compute='_invoice_partner')
     adition_asset_line_ids = fields.One2many('account.adition_asset', 'adition_asset_id', string='Adicion Activos Fijos')
     location_asset_line_ids = fields.One2many('account.location_asset', 'location_asset_id', string='Ubicacion Activo')
     value_adition = fields.Integer(compute= '_adition_asset_value')
 
-    @api.onchange('invoice_purchase')
+    @api.onchange('invoice_purchases')
     def _invoice_date(self):
-        self.invoice_date = self.invoice_purchase.invoice_date
-        self.invoice_partner = self.invoice_purchase.partner_id.name
+        self.invoice_date = self.invoice_purchases.invoice_date
+        self.invoice_partner = self.invoice_purchases.partner_id.name
 
     @api.onchange('responsable_asset')
     def _cargo(self):

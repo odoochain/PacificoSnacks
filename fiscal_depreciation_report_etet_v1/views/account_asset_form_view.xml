@@ -16,7 +16,7 @@
                     <field name="responsable_asset" />
                     <field name="cargo" />
                     <field name="location_asset_line_ids" />
-                    <field name="invoice_purchase"/>
+                    <field name="invoice_purchases"/>
                     <field name="invoice_date" />
                     <field name="invoice_partner" />
                 </xpath>
