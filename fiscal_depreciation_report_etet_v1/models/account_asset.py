@@ -16,9 +16,17 @@ class AccountAsset(models.Model):
     fiscal_depreciation_move_ids = fields.One2many('account.move_fiscal', 'asset_id', string='Lineas de Depreciacion')
     ref_asset = fields.Char(string="Referencia")
     location = fields.Char(string="Ubicacion del equipo")
-    responsable_asset = fields.Many2one('res.partner',string="Responsable del Activo")
-    invoice_purchase = fields.Many2one('purchase.order',string="Factura de compra")
-    
+    responsable_asset = fields.Many2one('res.partner', string="Responsable del Activo")
+    invoice_purchase = fields.Many2one('account.move', string="Factura de compra")
+    invoice_date = fields.Char(string='fecha', compute='_invoice_date')
+    invoice_partner = fields.Char(string='proveedor', compute='_invoice_partner')
+    adition_asset_line_ids = fields.One2many('account.adition_asset', 'adition_asset_id', string='Adicion Activos Fijos')
+    value_adition = fields.Integer(compute= '_adition_asset_value')
+
+    @api.onchange('invoice_purchase')
+    def _invoice_date(self):
+        self.invoice_date = self.invoice_purchase.invoice_date
+        self.invoice_partner = self.invoice_purchase.partner_id.name
 
 
     def compute_depreciation_fiscal_board(self):

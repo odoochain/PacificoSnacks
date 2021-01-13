@@ -7,7 +7,7 @@
     'summary': 'summary',
     'description': "reporte activos fijos",
     'website': 'https://www.endtoendt.com',
-    'depends': ['account','account_asset'],
+    'depends': ['account', 'account_asset'],
     'category': 'category',
     'author': 'Enrrique Aguiar',
     'sequence': 13,
