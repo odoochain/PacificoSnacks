@@ -28,7 +28,6 @@ class AccountAsset(models.Model):
         self.invoice_date = self.invoice_purchase.invoice_date
         self.invoice_partner = self.invoice_purchase.partner_id.name
 
-
     def compute_depreciation_fiscal_board(self):
         self.ensure_one()
         amount_change_ids = self.depreciation_move_ids.filtered(lambda x: x.asset_value_change and not x.reversal_move_id).sorted(key=lambda l: l.date)

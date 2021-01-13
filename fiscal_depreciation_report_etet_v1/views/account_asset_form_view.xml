@@ -15,7 +15,7 @@
                     <field name="ref_asset" />
                     <field name="responsable_asset" />
                     <field name="location" />
-                    <field name="invoice_purchase" />
+                    <field name="invoice_purchase"/>
                     <field name="invoice_date" />
                     <field name="invoice_partner" />
                 </xpath>
