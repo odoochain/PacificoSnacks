@@ -33,6 +33,7 @@ class HrLeave(models.Model):
 
     days_vacations = fields.Integer(string="Vaciones Disponibles", compute='get_days_vacations')
 
+    @api.depends('employee_id')
     def get_days_vacations(self):
         contracts = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id)])
         if contracts:
