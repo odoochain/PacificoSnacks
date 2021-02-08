@@ -31,7 +31,7 @@ class HrLeave(models.Model):
         
     )
 
-    days_vacations = fields.Integer(string="Vaciones Disponibles", compute='get_days_vacations')
+    days_vacations = fields.Integer(string="Vacaciones Disponibles", compute='get_days_vacations')
 
     @api.depends('employee_id')
     def get_days_vacations(self):
