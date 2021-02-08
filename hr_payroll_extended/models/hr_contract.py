@@ -28,6 +28,7 @@ class HrContract(models.Model):
     _inherit = "hr.contract"
     _description = "Employee Contract"
 
+    vacation_initial = fields.Float(string="Vacaciones iniciales Disfrutadas", default=0)
     accumulated_vacation = fields.Float(string="Vacaciones Acumuladas", compute='get_accumulated_vacation' )
     vacation_used = fields.Float(string="Vacaciones Disfrutadas", compute='get_vacation_used')
     vacations_available = fields.Float(string="Vacaciones Disponibles", compute='get_vacations_available')
@@ -53,7 +54,7 @@ class HrContract(models.Model):
         for vacation in vacations:
             vacation_used = vacation_used + vacation.number_of_days
 
-        self.vacation_used = vacation_used
+        self.vacation_used = vacation_used + self.vacation_initial
 
     def get_vacations_available(self):
         self.vacations_available = int(self.accumulated_vacation) - self.vacation_used

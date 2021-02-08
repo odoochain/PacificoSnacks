@@ -9,6 +9,7 @@
 				<page string="Vacaciones" name="vacations">
 					<group>
 						<group name="vacation" string="Días de Vacaciones">
+							<field name="vacation_initial"/>
 							<field name="accumulated_vacation"/>
 							<field name="vacation_used"/>
 							<field name="vacations_available"/>
