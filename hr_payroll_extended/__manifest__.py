@@ -29,6 +29,7 @@
         'views/hr_payslip_run_view.xml',
         'views/hr_rule_parameter_view.xml',
         'views/hr_leave_view.xml',
+        'views/hr_contract_vacation_view.xml',
         # 'views/hr_payroll_structure_view.xml',
         # 'views/hr_contract_view.xml',
         # 'views/report_contributionregistercust.xml',

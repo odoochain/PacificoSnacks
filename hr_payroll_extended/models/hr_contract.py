@@ -10,6 +10,9 @@ from collections import defaultdict
 from odoo import api, fields, models
 from odoo.tools import date_utils
 
+from datetime import datetime
+from datetime import date
+
 import pytz
 
 import logging
@@ -24,6 +27,38 @@ class HrContract(models.Model):
 
     _inherit = "hr.contract"
     _description = "Employee Contract"
+
+    accumulated_vacation = fields.Float(string="Vaciones Acumuladas", compute='get_accumulated_vacation' )
+    vacation_used = fields.Float(string="Vaciones Disfrutadas", compute='get_vacation_used')
+    vacations_available = fields.Float(string="Vaciones Disponibles", compute='get_vacations_available')
+    vacations_history = fields.Many2many('hr.leave' ,string="Historial", compute='get_history')
+
+    def get_accumulated_vacation(self):
+        date_from = datetime.combine(self.date_start, datetime.min.time())
+        if self.date_end != False and self.date_end <= date.today():
+            date_to = datetime.combine(self.date_end, datetime.max.time())
+        else:
+            date_to = datetime.combine(date.today(), datetime.max.time())
+        time_worked = self.env['hr.leave']._get_number_of_days(date_from, date_to, self.employee_id.id)['days']
+        if float(time_worked) >= 30:
+            accumulated_vacation = (time_worked/30) * 1.25
+        else:
+            accumulated_vacation = 0
+        self.accumulated_vacation = accumulated_vacation
+
+    def get_vacation_used(self):
+        vacations = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id), ('holiday_status_id', '=', 6), ('state', '=', 'validate')])
+        vacation_used = 0
+        for vacation in vacations:
+            vacation_used = vacation_used + vacation.number_of_days
+
+        self.vacation_used = vacation_used
+
+    def get_vacations_available(self):
+        self.vacations_available = int(self.accumulated_vacation) - self.vacation_used
+
+    def get_history(self):
+        self.vacations_history = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id), ('holiday_status_id', '=', 6), ('state', '=', 'validate')])
 
     def get_all_structures(self):
         """
