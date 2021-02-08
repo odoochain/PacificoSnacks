@@ -47,6 +47,7 @@ class HrContract(models.Model):
         self.accumulated_vacation = accumulated_vacation
 
     def get_vacation_used(self):
+        # El ('holiday_status_id', '=', 6) corresponde al tipo de ausencia de vacaciones, en caso de modificar el registro se debe cambiar el numero a evaluar
         vacations = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id), ('holiday_status_id', '=', 6), ('state', '=', 'validate')])
         vacation_used = 0
         for vacation in vacations:
@@ -58,6 +59,7 @@ class HrContract(models.Model):
         self.vacations_available = int(self.accumulated_vacation) - self.vacation_used
 
     def get_history(self):
+        # El ('holiday_status_id', '=', 6) corresponde al tipo de ausencia de vacaciones, en caso de modificar el registro se debe cambiar el numero a evaluar
         self.vacations_history = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id), ('holiday_status_id', '=', 6), ('state', '=', 'validate')])
 
     def get_all_structures(self):
