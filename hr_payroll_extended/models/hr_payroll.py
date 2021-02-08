@@ -176,8 +176,8 @@ class HrPayslip(models.Model):
                 day_rounded = self._round_days(work_entry_type, days)
                 add_days_rounding += (days - day_rounded)
                 # El ('work_entry_type_id', '=', 6) corresponde al tipo de entrada "Ausencias por Enfermedad", en caso de modificar el registro se debe cambiar el numero a evaluar
-                # El ('work_entry_type_id', '=', 11) corresponde al tipo de entrada "Total Ausencias por Enfermedad", en caso de modificar el registro se debe cambiar el numero a evaluar
-                if work_entry_type_id == 2 or work_entry_type_id == 11 :
+                # El ('work_entry_type_id', '=', 10) corresponde al tipo de entrada "Total Ausencias por Enfermedad", en caso de modificar el registro se debe cambiar el numero a evaluar
+                if work_entry_type_id == 6 or work_entry_type_id == 10 :
                     if day_rounded >= 3 and day_rounded < 4:
                             r_amount = (((paid_amount / 30) * absence_rate_2D) / 100) * day_rounded
                     elif day_rounded >= 4 and day_rounded <= 90:
