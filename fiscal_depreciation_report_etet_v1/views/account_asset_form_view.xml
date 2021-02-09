@@ -19,6 +19,10 @@
                     <field name="valorizado"/>
                 </xpath>
                 <xpath expr="//field[@name='book_value']" position="after">
+                    <field name="old_asset"/>
+                    <field name="asset_depreciate_value_initial"/>
+                    <field name="purchase_amount_asset"/>
+
                     <field name="tax_residual_value"/>
                     <field name="non_depreciable_value"/>
                 </xpath>
