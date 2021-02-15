@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 class AccountAssetSell(models.TransientModel):
     _inherit = 'account.asset.sell'
+    _description = 'Cambio de valor a variable de compra de activo original'
 
     @api.depends('asset_id', 'invoice_id', 'invoice_line_id')
     def _compute_gain_or_loss(self):

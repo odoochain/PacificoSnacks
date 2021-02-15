@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 class AccountlocationAsset(models.Model):
     _name = 'account.location_asset'
+    _description = 'Localizacion activos fijos'
     _rec_name = 'codigo'
 #    location_asset_id = fields.Many2one('account.asset', string='Tipo de activo')
 

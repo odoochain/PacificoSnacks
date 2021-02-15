@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 class AccountMove(models.Model):
     _name = 'account.move_fiscal'
+    _description = 'tabla de amortizacion fiscal'
 
     ref_fiscal = fields.Char(string='Referencia')
     date_fiscal = fields.Date(string='Fecha de Depreciacion')

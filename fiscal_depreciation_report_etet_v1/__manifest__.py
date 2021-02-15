@@ -18,6 +18,8 @@
         'security/ir.model.access.csv',
         'views/fiscal_depreciation_report_view.xml',
         'views/account_asset_form_view.xml',
+        'report/certification_report_inherit.xml',
+
 
 
     ],
