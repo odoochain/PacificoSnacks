@@ -15,6 +15,7 @@
         'hr_payroll',
         'hr_holidays',
         'analytic',
+        'hr_work_entry',
         ],
     'description': '''
 
@@ -28,11 +29,12 @@
         'views/hr_payslip_run_view.xml',
         'views/hr_rule_parameter_view.xml',
         'views/hr_leave_view.xml',
+        'views/hr_contract_vacation_view.xml',
         # 'views/hr_payroll_structure_view.xml',
         # 'views/hr_contract_view.xml',
         # 'views/report_contributionregistercust.xml',
         'views/account_analytic_account_view.xml',
-        # 'wizard/hr_payroll_contribution_register_report_views.xml',
+        'wizard/generate_hr_work_entry_view.xml',
         'data/data.xml',
         # 'report/report.xml',
         'security/ir.model.access.csv',

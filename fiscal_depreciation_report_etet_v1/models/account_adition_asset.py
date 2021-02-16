@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 class AccountAditionAsset(models.Model):
     _name = 'account.adition_asset'
+    _description = 'Adicion de activos hijos al activo original'
 
     adition_asset_id = fields.Many2one('account.asset')
 

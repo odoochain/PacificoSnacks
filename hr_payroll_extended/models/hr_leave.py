@@ -14,7 +14,7 @@ from odoo.tools import float_compare
 from odoo.tools.float_utils import float_round
 from odoo.tools.translate import _
 from odoo.osv import expression
-
+from odoo.exceptions import except_orm, Warning, RedirectWarning, ValidationError
 _logger = logging.getLogger(__name__)
 
 # Used to agglomerate the attendances in order to find the hour_from and hour_to
@@ -30,7 +30,24 @@ class HrLeave(models.Model):
         default='0.0'
         
     )
-    
+
+    days_vacations = fields.Integer(string="Vacaciones Disponibles", compute='get_days_vacations')
+
+    @api.depends('employee_id')
+    def get_days_vacations(self):
+        contracts = self.env['hr.contract'].search([('employee_id', '=', self.employee_id.id)])
+        if contracts:
+            for contract in contracts:
+                self.days_vacations = contract.vacations_available
+        else:
+            self.days_vacations = 0
+
+    def write(self, values):
+        # El 6 corresponde al tipo de ausencia de vacaciones, en caso de modificar el registro se debe cambiar el numero a evaluar
+        if self.holiday_status_id.id == 6 and self.days_vacations < self.number_of_days:
+            raise Warning('¡No es posible registrar la ausencia! '
+                          'El empleado no tiene suficientes días de vacaciones ('+str(self.days_vacations)+')')
+        return super(HrLeave, self).write(values)
 
     # @api.onchange('request_date_from_period', 'request_hour_from', 'request_hour_to',
     #               'request_date_from', 'request_date_to',
